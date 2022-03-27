@@ -7,4 +7,5 @@ namespace KeyCardWebServices.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
+
 }
