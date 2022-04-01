@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Component } from "react";
-import TableComponent from './component/tableComponent';
-import './App.css';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
+import HomeComponent from "./component/HomeComponent";
+import LoginComponent from "./component/loginComponent";
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>Application de trimbrage</p>
-      </header>
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+          </ul>
+        </nav>
 
-      <body>
-        <h1>Trimbrage du jour</h1>
-        <TableComponent />
-      </body>
-
-      <footer>
-        <p>test</p>
-      </footer>
-    </div>
+        {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Routes>
+          <Route path="/" element={HomeComponent}/>
+          <Route path="/login" element={LoginComponent} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
-
-export default App;
