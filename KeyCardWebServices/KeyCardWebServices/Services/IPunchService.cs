@@ -10,9 +10,9 @@ public interface IPunchService
 
     Task<PunchViewModel> EditPunch(AppUser user, PunchEditDto editDto);
 
-    Task<PunchViewModel> GetPunch(AppUser user, Guid punchId);
-
     Task<PunchViewModel> DeletePunch(AppUser user, Guid punchId);
+
+    Task<PunchViewModel> GetPunch(AppUser user, Guid punchId);
 
     Task<List<PunchViewModel>> GetPunches(AppUser user, PunchFilterDto filter);
 }
