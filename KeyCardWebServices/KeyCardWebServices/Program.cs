@@ -33,7 +33,7 @@ public static class Program
 
         builder.Services.AddDbContext<ApplicationDbContext>(o =>
         {
-            if (builder.Environment.IsProduction())
+            if (builder.Environment.IsProduction() && false)
                 o.UseSqlite("Data Source=app.db", x => x.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
             else
                 o.UseInMemoryDatabase("InMemoryDb");
