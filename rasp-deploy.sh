@@ -10,4 +10,4 @@ unzip ./master.zip -d ./app
 
 cd ./app/keycard-project-master
 
-docker compose up -d
+docker compose -f docker-compose.rasp.yml up -d
