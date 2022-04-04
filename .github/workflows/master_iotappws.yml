@@ -57,4 +57,4 @@ jobs:
           app-name: 'iotappws'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_09F95E184B684F7AB1B637E2F0355A1C }}
-          package: ${{env.DOTNET_ROOT}}/myapp
+          package: .
