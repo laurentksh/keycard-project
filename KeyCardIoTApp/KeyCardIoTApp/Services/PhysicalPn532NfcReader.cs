@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Iot.Device.Pn532;
 using Iot.Device.Pn532.ListPassive;
+using Iot.Device.Rfid;
 
 namespace KeyCardIoTApp.Services;
 
@@ -14,15 +15,16 @@ public class PhysicalPn532NfcReader : INfcReader
             _device = "COM7";
     }
 
-    public Task<string> ReadAsync(CancellationToken token)
+    public async Task<string> ReadAsync(CancellationToken cancellationToken)
     {
         var pn532 = new Pn532(_device);
 
         byte[] dataBuffer = null!;
-        while (!token.IsCancellationRequested)
+        while (!cancellationToken.IsCancellationRequested)
         {
             dataBuffer = pn532.AutoPoll(5, 300, new PollingType[]
             {
+                PollingType.Passive106kbpsISO144443_4A,
                 PollingType.Passive106kbpsISO144443_4B
             })!;
 
@@ -31,8 +33,17 @@ public class PhysicalPn532NfcReader : INfcReader
                 if (dataBuffer.Length >= 3)
                     break;
             }
+
+            await Task.Delay(200, cancellationToken);
         }
 
-        return Task.FromResult(Encoding.UTF8.GetString(pn532.TryDecodeData106kbpsTypeB(dataBuffer.AsSpan()[3..])!.ApplicationData));
+        string? token = null;
+        
+        if (pn532.TryDecode106kbpsTypeA(dataBuffer.AsSpan()[3..]) is Data106kbpsTypeA typeA && typeA.Ats != null)
+            token = Encoding.UTF8.GetString(typeA.Ats);
+        if (pn532.TryDecodeData106kbpsTypeB(dataBuffer.AsSpan()[3..]) is Data106kbpsTypeB typeB)
+            token = Encoding.UTF8.GetString(typeB.ApplicationData);
+
+        return token ?? throw new Exception("Could not read tag.");
     }
 }
