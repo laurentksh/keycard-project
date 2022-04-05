@@ -11,13 +11,13 @@ public static class Program
         INfcReader nfcReader;
         IPunchService punchService = RestService.For<IPunchService>(
             Environment.GetEnvironmentVariable("WebServiceUri") ??
-            args.GetValue(1) as string ??
+            (args.Length > 1 ? args[1] : null) ??
             "http://localhost:9000");
 
-        if ((args.GetValue(0) as string)?.ToLower() == "prd")
-            nfcReader = new TestNfcReader();
-        else
+        if ((args.Length > 0 ? args[0] : null)?.ToLower() == "prd")
             nfcReader = new PhysicalPn532NfcReader();
+        else
+            nfcReader = new TestNfcReader();
 
         while (true)
         {
@@ -38,7 +38,12 @@ public static class Program
             }
             catch (ApiException ex)
             {
-                Console.WriteLine("Could not reach server: " + ex.ToString());
+                Console.WriteLine("Api responded with error: " + ex.ToString());
+                continue;
+            }
+            catch (HttpRequestException netEx)
+            {
+                Console.WriteLine("Could not reach remote server: " + netEx.ToString());
                 continue;
             }
 
