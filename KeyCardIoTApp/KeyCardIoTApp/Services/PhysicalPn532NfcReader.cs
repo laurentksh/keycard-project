@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Device.Spi;
+using System.Text;
 using Iot.Device.Pn532;
 using Iot.Device.Pn532.ListPassive;
 using Iot.Device.Rfid;
@@ -7,17 +8,21 @@ namespace KeyCardIoTApp.Services;
 
 public class PhysicalPn532NfcReader : INfcReader
 {
-    private readonly string _device = "/dev/ttyS0";
+    //private readonly string _device = "/dev/ttyS0"; //or /dev/serial0
 
     public PhysicalPn532NfcReader()
     {
-        if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            _device = "COM7";
+        /*if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            _device = "COM7";*/
     }
 
     public async Task<string> ReadAsync(CancellationToken cancellationToken)
     {
-        var pn532 = new Pn532(_device);
+        var pn532 = new Pn532(SpiDevice.Create(new SpiConnectionSettings(0)
+        {
+            Mode = SpiMode.Mode0,
+            DataFlow = DataFlow.LsbFirst
+        }), 4);
 
         byte[] dataBuffer = null!;
         while (!cancellationToken.IsCancellationRequested)
