@@ -8,12 +8,14 @@ import { PunchInterface } from "../interface/PunchInterface";
 const TableComponent = (): JSX.Element => {
   const [punchList, setPunchList] = useState<PunchInterface[]>([]);
 
-  useEffect(async () => {
-    setPunchList(await getPunches());
+  useEffect( () => {
+      getPunches()
+      .then(res => setPunchList(res))
+      .catch(error => console.log('error', error));
   }, []);
 
   async function getPunches() : Promise<PunchInterface[]> {
-    const response = await axios.get('/api/v1/Punch/history');
+    const response = await axios.post('/api/v1/Punch/history');
     console.log(response);
     return response.data;
   }
