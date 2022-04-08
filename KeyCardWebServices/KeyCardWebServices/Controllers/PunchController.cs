@@ -61,7 +61,7 @@ public class PunchController : ControllerBase
         return Ok();
     }
 
-    [HttpGet("history")]
+    [HttpPost("history")]
     public async Task<IActionResult> GetPunches([FromBody] PunchFilterDto filter)
     {
         var user = await HttpContext.GetUserOrThrow();

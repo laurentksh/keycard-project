@@ -6,6 +6,10 @@ using Iot.Device.Rfid;
 
 namespace KeyCardIoTApp.Services;
 
+/*
+ * TODO: Use the correct bus and pin for SPI communication.
+ * 
+ */
 public class PhysicalPn532NfcReader : INfcReader
 {
     //private readonly string _device = "/dev/ttyS0"; //or /dev/serial0

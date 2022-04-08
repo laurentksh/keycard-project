@@ -157,7 +157,8 @@ public static class Program
         });
 
         builder.Services
-            .AddTransient<IAuthService, AuthService>();
+            .AddTransient<IAuthService, AuthService>()
+            .AddTransient<IPunchService, PunchService>();
 
         var app = builder.Build();
         
