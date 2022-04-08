@@ -1,9 +1,19 @@
+import axios from "axios";
 import * as React from "react";
 import { Component } from "react";
 import { useState } from "react";
 
 
 const TableComponent = (): JSX.Element => {
+
+    async function getUser() : Promise<any> {
+        const response = await axios.get('/user?ID=12345');
+        console.log(response);
+        return response.data;
+    }
+
+
+
     return (
         <div className="ml-40 mr-40 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
             <div className="mb-4">
