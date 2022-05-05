@@ -1,9 +1,11 @@
-﻿using KeyCardWebServices.Extensions;
+﻿using KeyCardWebServices.Data.Models;
+using KeyCardWebServices.Extensions;
 using KeyCardWebServices.Models.Dtos;
 using KeyCardWebServices.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace KeyCardWebServices.Controllers;
 
@@ -26,7 +28,15 @@ public class PunchController : ControllerBase
     {
         var user = await HttpContext.GetUserOrThrow();
 
-        var punch = await _punchService.RegisterPunch(user);
+        var claimValue = User.Claims.SingleOrDefault(x => x.Type == "PunchSource", new Claim("PunchSource", PunchSource.WebPortal.ToString())).Value;
+        var source = claimValue switch
+        {
+            "WebPortal" => PunchSource.WebPortal,
+            "Physical" => PunchSource.Physical,
+            _ => PunchSource.Unknown
+        };
+
+        var punch = await _punchService.RegisterPunch(user, source);
 
         return Created($"/{punch.Id}", punch);
     }
@@ -46,7 +56,7 @@ public class PunchController : ControllerBase
     {
         var user = await HttpContext.GetUserOrThrow();
 
-        await _punchService.EditPunch(user, editDto);
+        await _punchService.EditPunch(user, id, editDto);
 
         return Ok();
     }
@@ -62,7 +72,7 @@ public class PunchController : ControllerBase
     }
 
     [HttpPost("history")]
-    public async Task<IActionResult> GetPunches([FromBody] PunchFilterDto filter)
+    public async Task<IActionResult> GetPunches([FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] PunchFilterDto? filter)
     {
         var user = await HttpContext.GetUserOrThrow();
         

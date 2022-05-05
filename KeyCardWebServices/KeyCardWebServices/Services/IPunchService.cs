@@ -6,13 +6,13 @@ namespace KeyCardWebServices.Services;
 
 public interface IPunchService
 {
-    Task<PunchViewModel> RegisterPunch(AppUser user);
+    Task<PunchViewModel> RegisterPunch(AppUser user, PunchSource source);
 
-    Task<PunchViewModel> EditPunch(AppUser user, PunchEditDto editDto);
+    Task<PunchViewModel> EditPunch(AppUser user, Guid id, PunchEditDto editDto);
 
     Task<PunchViewModel> DeletePunch(AppUser user, Guid punchId);
 
     Task<PunchViewModel> GetPunch(AppUser user, Guid punchId);
 
-    Task<List<PunchViewModel>> GetPunches(AppUser user, PunchFilterDto filter);
+    Task<List<PunchViewModel>> GetPunches(AppUser user, PunchFilterDto? filter);
 }

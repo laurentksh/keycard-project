@@ -11,6 +11,14 @@ public class Punch
     public Guid UserId { get; set; }
 
     public PunchSource Source { get; set; }
+
+    public static PunchSource FromAuthGrantType(AuthGrantType type) => type switch
+    {
+        AuthGrantType.Unknown => PunchSource.Unknown,
+        AuthGrantType.Jwt => PunchSource.WebPortal,
+        AuthGrantType.Physical => PunchSource.Physical,
+        _ => throw new NotImplementedException(),
+    };
 }
 
 public enum PunchSource

@@ -35,7 +35,9 @@ public class AuthService : IAuthService
 
     public async Task<AuthGrant?> AuthenticateUsingPhysicalKey(string physicalKey)
     {
-        return await _dbContext.AuthGrants.SingleOrDefaultAsync(x => x.Token == physicalKey && x.Type == AuthGrantType.Physical);
+        return await _dbContext.AuthGrants
+            .Include(x => x.IssuedTo)
+            .SingleOrDefaultAsync(x => x.Token == physicalKey && x.Type == AuthGrantType.Physical);
     }
 
     public async Task<AuthGrantViewModel> Login(LoginDto loginDto, IPAddress remote)
@@ -72,7 +74,9 @@ public class AuthService : IAuthService
 
         if (authGrantType == AuthGrantType.Jwt)
         {
-            var token = BuildJwt(user, await _userManager.GetClaimsAsync(user), await _userManager.GetRolesAsync(user));
+            var claims = await _userManager.GetClaimsAsync(user);
+            claims.Add(new Claim("PunchSource", Punch.FromAuthGrantType(authGrantType).ToString()));
+            var token = BuildJwt(user, claims, await _userManager.GetRolesAsync(user));
 
             grant = new AuthGrant
             {
@@ -91,7 +95,7 @@ public class AuthService : IAuthService
             grant = new AuthGrant
             {
                 Id = Guid.NewGuid(),
-                Token = StringUtilities.SecureRandom(32, StringUtilities.AllowedChars.All),
+                Token = StringUtilities.SecureRandom(32, StringUtilities.AllowedChars.AlphabetNumbers),
                 Device = deviceName,
                 Type = authGrantType,
                 IssuedTo = user,

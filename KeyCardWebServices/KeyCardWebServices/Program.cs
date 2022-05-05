@@ -33,10 +33,7 @@ public static class Program
 
         builder.Services.AddDbContext<ApplicationDbContext>(o =>
         {
-            if (builder.Environment.IsProduction() && false)
-                o.UseSqlite("Data Source=app.db", x => x.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
-            else
-                o.UseInMemoryDatabase("InMemoryDb");
+            o.UseInMemoryDatabase("InMemoryDb");
         });
 
         builder.Services.AddIdentity<AppUser, AppRole>(x =>
@@ -172,8 +169,8 @@ public static class Program
         }
 
         app.UseHttpsRedirection();
-        
 
+        app.UseCors();
         app.UseAuthentication();
         app.UseAuthorization();
 
