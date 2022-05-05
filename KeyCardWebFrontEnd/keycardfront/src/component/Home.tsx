@@ -65,7 +65,7 @@ const Home = (): JSX.Element => {
         navigate("/login");
         console.log('error', error)
       });
-  });
+  }, [navigate, getPunches]);
 
   return (
       <>
