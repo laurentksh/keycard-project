@@ -29,11 +29,11 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("device")]
-    public async Task<IActionResult> AuthorizeNewDevice([FromBody] string deviceName)
+    public async Task<IActionResult> AuthorizeNewDevice([FromBody] GrantPhysicalDeviceDto device)
     {
         var user = await HttpContext.GetUserOrThrow();
 
-        var grant = await _authService.AuthorizeNewDevice(user, Data.Models.AuthGrantType.Physical, deviceName);
+        var grant = await _authService.AuthorizeNewDevice(user, Data.Models.AuthGrantType.Physical, device.DeviceName);
 
         return Ok(grant);
     }

@@ -1,32 +1,15 @@
-import React from "react";
+import axios from "axios";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Link
 } from "react-router-dom";
-import HomeComponent from "./component/HomeComponent";
-import LoginComponent from "./component/loginComponent";
+import Home from "./component/Home";
+import Login from "./component/Login";
 
-export default function App() {
-  const [loginMenu, isLoginMenu] = React.useState(false);
-  const [homeMenu, isHomePage] = React.useState(false);
-
-  function MenuLink(props: any) {
-    const isHome = props.isHomePage;
-    const isLogin = props.isLoginPage;
-
-    if (loginMenu) 
-    {
-      isHomePage(false);
-      return <LoginComponent/>
-    } else if (homeMenu) {
-      isLoginMenu(false);
-      return <HomeComponent/>
-    } else {
-      return <HomeComponent/>
-    }
-  }
+export default function App(): JSX.Element {
+  axios.defaults.baseURL = process.env.REACT_APP_BACKEND;
 
   return (
     <Router>
@@ -42,11 +25,9 @@ export default function App() {
           </ul>
         </nav>
 
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
         <Routes>
-          <Route path="/" element={< HomeComponent />}></Route>
-          <Route path="/login" element={< LoginComponent />} ></Route>
+          <Route path="/" element={< Home />}></Route>
+          <Route path="/login" element={< Login />} ></Route>
         </Routes>
 
       </div>

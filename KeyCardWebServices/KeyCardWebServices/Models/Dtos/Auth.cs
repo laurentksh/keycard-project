@@ -6,3 +6,8 @@ public class LoginDto
 
     public string Password { get; set; }
 }
+
+public class GrantPhysicalDeviceDto
+{
+    public string DeviceName { get; set; }
+}
