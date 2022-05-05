@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyCardWebServices", "KeyCardWebServices\KeyCardWebServices.csproj", "{A91D522C-F5BC-45A7-A183-D2FD28D9220F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeyCardWebServices", "KeyCardWebServices\KeyCardWebServices.csproj", "{A91D522C-F5BC-45A7-A183-D2FD28D9220F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{980C6035-6DF6-4770-861B-ADABCB210957}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

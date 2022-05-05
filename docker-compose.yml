@@ -1,0 +1,20 @@
+version: '3'
+services:
+    backendservice:
+        build: ./KeyCardWebServices/KeyCardWebServices
+        ports:
+        - "9000:80"
+        - "9001:443"
+    webfrontend:
+        build: ./KeyCardWebFrontEnd/keycardfront
+        ports:
+        - "9100:80"
+        - "3000:3000"
+        depends_on:
+        - backendservice
+    iotfrontend:
+        build: ./KeyCardIoTApp/KeyCardIoTApp
+        environment:
+          WebServiceUri: "http://localhost:9000"
+        depends_on:
+        - backendservice

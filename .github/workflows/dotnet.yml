@@ -1,0 +1,50 @@
+name: .NET Build, Test
+
+on:
+  push:
+    branches: [ master ]
+    paths: [ "KeyCardWebServices/**", "KeyCardIoTApp/**", ".github/workflows/dotnet.yml" ]
+  pull_request:
+    branches: [ master ]
+    paths: [ "KeyCardWebServices/**", "KeyCardIoTApp/**", ".github/workflows/dotnet.yml" ]
+
+jobs:
+  build-iot:
+    name: "IoT"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./KeyCardIoTApp/
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+
+  build-webservices:
+      name: "WebServices"
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: ./KeyCardWebServices/
+
+      steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
