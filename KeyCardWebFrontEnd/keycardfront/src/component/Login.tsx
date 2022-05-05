@@ -55,9 +55,6 @@ const Login = (): JSX.Element => {
                 <button onClick={() => doLogin()} className="bg-blue hover:bg-blue-dark text-black font-bold py-2 px-4 rounded" type="button">
                     Sign In
                 </button>
-                <a className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="#">
-                    Forgot Password?
-                </a>
             </div>
         </div>
     );
