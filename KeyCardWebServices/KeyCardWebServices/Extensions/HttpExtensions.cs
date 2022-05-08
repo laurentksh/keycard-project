@@ -65,6 +65,14 @@ public static class HttpExtensions
         }
     }
 
+    public static AuthGrantType GetAuthGrantType(this HttpContext context)
+    {
+        if (context.User == null)
+            return AuthGrantType.Unknown;
+
+        return Enum.Parse<AuthGrantType>(context.User.Claims.SingleOrDefault(x => x.Type == "AuthGrantType", new Claim("AuthGrantType", AuthGrantType.Unknown.ToString())).Value);
+    }
+
     public static IActionResult Handle(this HttpRequest request, Exception exception)
     {
         var (httpStatus, problemType, problemMsg) = GetProblem(exception);

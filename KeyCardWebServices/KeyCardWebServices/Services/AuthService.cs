@@ -37,7 +37,7 @@ public class AuthService : IAuthService
     {
         return await _dbContext.AuthGrants
             .Include(x => x.IssuedTo)
-            .SingleOrDefaultAsync(x => x.Token == physicalKey && x.Type == AuthGrantType.Physical);
+            .SingleOrDefaultAsync(x => x.Token == physicalKey && x.Type == AuthGrantType.DeviceKey);
     }
 
     public async Task<AuthGrantViewModel> Login(LoginDto loginDto, IPAddress remote)
@@ -75,7 +75,7 @@ public class AuthService : IAuthService
         if (authGrantType == AuthGrantType.Jwt)
         {
             var claims = await _userManager.GetClaimsAsync(user);
-            claims.Add(new Claim("PunchSource", Punch.FromAuthGrantType(authGrantType).ToString()));
+            claims.Add(new Claim("AuthGrantType", authGrantType.ToString()));
             var token = BuildJwt(user, claims, await _userManager.GetRolesAsync(user));
 
             grant = new AuthGrant
@@ -90,7 +90,7 @@ public class AuthService : IAuthService
                 ExpirationDate = token.ValidTo
             };
         }
-        else if (authGrantType == AuthGrantType.Physical)
+        else if (authGrantType == AuthGrantType.DeviceKey)
         {
             grant = new AuthGrant
             {

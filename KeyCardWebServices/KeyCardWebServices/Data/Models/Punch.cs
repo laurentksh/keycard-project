@@ -16,7 +16,7 @@ public class Punch
     {
         AuthGrantType.Unknown => PunchSource.Unknown,
         AuthGrantType.Jwt => PunchSource.WebPortal,
-        AuthGrantType.Physical => PunchSource.Physical,
+        AuthGrantType.DeviceKey => PunchSource.Physical,
         _ => throw new NotImplementedException(),
     };
 }

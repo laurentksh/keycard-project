@@ -39,7 +39,7 @@ public class PhysicalAuthenticationHandler : AuthenticationHandler<PhysicalAuthe
             id.AddClaim(new Claim(ClaimTypes.NameIdentifier, result.IssuedToId.ToString()));
             id.AddClaim(new Claim("jti", result.Id.ToString()));
             id.AddClaim(new Claim(ClaimTypes.Expiration, result.ExpirationDate.ToString()));
-            id.AddClaim(new Claim("PunchSource", Punch.FromAuthGrantType(result.Type).ToString()));
+            id.AddClaim(new Claim("AuthGrantType", result.Type.ToString()));
 
             return AuthenticateResult.Success(
                 new AuthenticationTicket(new ClaimsPrincipal(id), Scheme.Name)

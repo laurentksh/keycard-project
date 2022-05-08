@@ -28,20 +28,14 @@ public class PunchController : ControllerBase
     {
         var user = await HttpContext.GetUserOrThrow();
 
-        var claimValue = User.Claims.SingleOrDefault(x => x.Type == "PunchSource", new Claim("PunchSource", PunchSource.WebPortal.ToString())).Value;
-        var source = claimValue switch
-        {
-            "WebPortal" => PunchSource.WebPortal,
-            "Physical" => PunchSource.Physical,
-            _ => PunchSource.Unknown
-        };
+        var authGrant = HttpContext.GetAuthGrantType();
 
-        var punch = await _punchService.RegisterPunch(user, source);
+        var punch = await _punchService.RegisterPunch(user, Data.Models.Punch.FromAuthGrantType(authGrant));
 
-        return Created($"/{punch.Id}", punch);
+        return Created($"/api/v1/Punch/{punch.Id}", punch);
     }
 
-    [HttpGet("/{id}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetPunch([FromRoute] Guid id)
     {
         var user = await HttpContext.GetUserOrThrow();
@@ -51,7 +45,7 @@ public class PunchController : ControllerBase
         return Ok(punch);
     }
 
-    [HttpPatch("/{id}")]
+    [HttpPatch("{id}")]
     public async Task<IActionResult> EditPunch([FromRoute] Guid id, [FromBody] PunchEditDto editDto)
     {
         var user = await HttpContext.GetUserOrThrow();
@@ -61,7 +55,7 @@ public class PunchController : ControllerBase
         return Ok();
     }
 
-    [HttpDelete("/{id}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePunch([FromRoute] Guid id)
     {
         var user = await HttpContext.GetUserOrThrow();

@@ -1,4 +1,5 @@
-﻿using KeyCardWebServices.Extensions;
+﻿using System.IdentityModel.Tokens.Jwt;
+using KeyCardWebServices.Extensions;
 using KeyCardWebServices.Models.Dtos;
 using KeyCardWebServices.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -33,8 +34,19 @@ public class AuthController : ControllerBase
     {
         var user = await HttpContext.GetUserOrThrow();
 
-        var grant = await _authService.AuthorizeNewDevice(user, Data.Models.AuthGrantType.Physical, device.DeviceName);
+        var grant = await _authService.AuthorizeNewDevice(user, Data.Models.AuthGrantType.DeviceKey, device.DeviceName);
 
         return Ok(grant);
+    }
+
+    [Authorize(AuthenticationSchemes = "WebPortalAuth,PhysicalAuth")]
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        var user = await HttpContext.GetUserOrThrow();
+
+        await _authService.InvalidateGrant(user, Guid.Parse(User.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value));
+
+        return Ok();
     }
 }

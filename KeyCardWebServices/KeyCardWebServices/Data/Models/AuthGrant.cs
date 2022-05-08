@@ -23,5 +23,5 @@ public enum AuthGrantType
 {
     Unknown = 0,
     Jwt = 1,
-    Physical = 2
+    DeviceKey = 2
 }
