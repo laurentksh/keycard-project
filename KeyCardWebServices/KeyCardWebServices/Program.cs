@@ -24,7 +24,8 @@ public static class Program
             if (builder.Environment.IsProduction())
             {
                 x.SetMinimumLevel(LogLevel.Information);
-            } else
+            }
+            else
             {
                 x.SetMinimumLevel(LogLevel.Debug);
                 x.AddConsole();
@@ -108,7 +109,7 @@ public static class Program
                 Title = "KeyCard WebApi",
                 Version = "v1"
             });
-            
+
             //x.OperationFilter<CustomHeaderOperationFilter>("X-PHYSICALAUTH", "Physical NFC-based authentication");
             x.AddSecurityDefinition("WebPortalAuth", new OpenApiSecurityScheme
             {
@@ -158,15 +159,12 @@ public static class Program
             .AddTransient<IPunchService, PunchService>();
 
         var app = builder.Build();
-        
+
         app.UseApiVersioning();
 
         // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         app.UseHttpsRedirection();
 
